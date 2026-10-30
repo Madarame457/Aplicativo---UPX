@@ -26,9 +26,14 @@ function defaultSave() {
     lives: MAX_LIVES,
     livesUpdatedAt: Date.now(),
     completedLevels: [],
-    completedEvents: []
+    completedEvents: [],
+    totalCorrect: 0,          // perguntas acertadas no total
+    pledges: [],              // compromissos assumidos na aba Impacto
+    pledgesRewarded: []       // compromissos que já deram XP
   };
 }
+
+const XP_PLEDGE = 5;          // XP por compromisso assumido (só na 1ª vez)
 
 let save = loadSave();
 
@@ -108,6 +113,40 @@ function refreshIcons() {
 
 function fireConfetti(options) {
   if (typeof window.confetti === 'function') window.confetti(options);
+}
+
+function randomItem(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function shuffle(list) {
+  const copy = [...list];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+// Título do jogador conforme o XP, e quanto falta para o próximo
+function getRank(xp) {
+  let index = 0;
+  RANKS.forEach((rank, i) => { if (xp >= rank.xp) index = i; });
+  const current = RANKS[index];
+  const next = RANKS[index + 1] || null;
+  const percent = next ? Math.round(((xp - current.xp) / (next.xp - current.xp)) * 100) : 100;
+  return { current, next, percent };
+}
+
+function factCard(fact) {
+  return `
+    <div class="bg-gradient-to-br from-emerald-50 to-lime-50 border border-emerald-200 rounded-2xl p-4 flex items-start gap-3 shadow-sm">
+      <span class="text-3xl shrink-0">🌍</span>
+      <div class="text-xs text-emerald-950 leading-relaxed">
+        <span class="block text-[10px] font-black uppercase tracking-wider text-emerald-700 mb-0.5">Você sabia?</span>
+        ${esc(fact)}
+      </div>
+    </div>`;
 }
 
 
@@ -267,43 +306,58 @@ function renderLoginView(errorMsg = '') {
   document.getElementById('app-nav').classList.add('hidden');
   hideFeedback();
 
+  const floaters = ['🥤', '📄', '🍾', '🥫', '🍎', '🔋', '♻️', '🌱']
+    .map((e, i) => `<span class="floater" style="left:${6 + i * 12}%; animation-delay:${i * 0.9}s; animation-duration:${9 + (i % 3) * 2}s">${e}</span>`)
+    .join('');
+
   viewport.innerHTML = `
-    <div class="p-6 min-h-full flex flex-col justify-between items-center bg-gradient-to-b from-[#081c15] via-[#1b4332] to-slate-900 text-white">
+    <div class="relative min-h-full overflow-hidden bg-gradient-to-b from-[#081c15] via-[#1b4332] to-[#0b2a20] text-white">
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true">${floaters}</div>
 
-      <div class="w-full text-center mt-6 space-y-3">
-        <div class="inline-block bg-emerald-500/20 p-4 rounded-3xl border border-emerald-400/30">
-          <span class="text-6xl inline-block spin-slow">♻️</span>
-        </div>
-        <h1 class="text-3xl font-black tracking-tight text-white">EcoQuest</h1>
-        <p class="text-xs text-emerald-200/80 px-4">Aprenda a reciclar do jeito divertido, com fases, eventos e memes virais!</p>
-      </div>
-
-      <form onsubmit="handleLogin(event)" class="w-full bg-white/10 backdrop-blur-md p-5 rounded-3xl border border-white/15 space-y-3 shadow-2xl my-8" novalidate>
-        <h2 class="text-sm font-extrabold text-emerald-300 text-center uppercase tracking-wider">Crie sua EcoConta</h2>
-
-        <div class="space-y-1.5">
-          <label for="login-name" class="text-[10px] font-bold text-slate-300">SEU NOME / APELIDO</label>
-          <input type="text" id="login-name" maxlength="30" autocomplete="nickname" value="${esc(save.user.name)}" placeholder="Ex: EcoJogador"
-            class="w-full p-3 rounded-xl bg-slate-800/80 border border-emerald-500/30 text-white font-bold text-sm focus:outline-none focus:border-emerald-400" />
+      <div class="relative p-6 min-h-full flex flex-col justify-between items-center">
+        <div class="w-full text-center mt-6 space-y-3">
+          <div class="inline-block bg-emerald-400/15 p-4 rounded-[28px] border border-emerald-300/30 glow">
+            <span class="text-6xl inline-block spin-slow">♻️</span>
+          </div>
+          <h1 class="text-4xl font-black tracking-tight">Eco<span class="text-emerald-400">Quest</span></h1>
+          <p class="text-sm text-emerald-100/90 px-4 font-semibold">Aprenda a reciclar jogando, com fases, eventos e memes virais!</p>
         </div>
 
-        <div class="space-y-1.5">
-          <label for="login-email" class="text-[10px] font-bold text-slate-300">E-MAIL (OPCIONAL)</label>
-          <input type="email" id="login-email" maxlength="80" autocomplete="email" value="${esc(save.user.email)}" placeholder="seu@email.com"
-            class="w-full p-3 rounded-xl bg-slate-800/80 border border-emerald-500/30 text-white font-bold text-sm focus:outline-none focus:border-emerald-400" />
+        <div class="w-full mt-6 bg-rose-500/15 border border-rose-300/30 rounded-2xl p-3 flex items-center gap-3">
+          <span class="text-3xl">⚠️</span>
+          <p class="text-[11px] text-rose-50 leading-relaxed">
+            <strong class="text-white">O Brasil recicla só 8,7% do seu lixo.</strong>
+            Cada pessoa que aprende a separar certo muda esse número. Bora?
+          </p>
         </div>
 
-        <p id="login-error" class="text-[11px] font-bold text-rose-300 ${errorMsg ? '' : 'hidden'}">${esc(errorMsg)}</p>
+        <form onsubmit="handleLogin(event)" class="w-full bg-white/10 backdrop-blur-md p-5 rounded-3xl border border-white/15 space-y-3 shadow-2xl my-6" novalidate>
+          <h2 class="text-sm font-extrabold text-emerald-300 text-center uppercase tracking-wider">Crie sua EcoConta</h2>
 
-        <button type="submit" class="w-full py-3.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl shadow-lg press mt-2">
-          Começar a jogar 🚀
-        </button>
+          <div class="space-y-1.5">
+            <label for="login-name" class="text-[10px] font-bold text-slate-300">SEU NOME / APELIDO</label>
+            <input type="text" id="login-name" maxlength="30" autocomplete="nickname" value="${esc(save.user.name)}" placeholder="Ex: EcoJogador"
+              class="w-full p-3 rounded-xl bg-slate-900/60 border border-emerald-500/30 text-white font-bold text-sm focus:outline-none focus:border-emerald-400" />
+          </div>
 
-        <p class="text-[10px] text-emerald-200/60 text-center">Seu progresso fica salvo neste aparelho.</p>
-      </form>
+          <div class="space-y-1.5">
+            <label for="login-email" class="text-[10px] font-bold text-slate-300">E-MAIL (OPCIONAL)</label>
+            <input type="email" id="login-email" maxlength="80" autocomplete="email" value="${esc(save.user.email)}" placeholder="seu@email.com"
+              class="w-full p-3 rounded-xl bg-slate-900/60 border border-emerald-500/30 text-white font-bold text-sm focus:outline-none focus:border-emerald-400" />
+          </div>
 
-      <div class="text-[10px] text-emerald-300/60 text-center pb-2">
-        EcoQuest &copy; Projeto Educacional Sustentável
+          <p id="login-error" class="text-[11px] font-bold text-rose-300 ${errorMsg ? '' : 'hidden'}">${esc(errorMsg)}</p>
+
+          <button type="submit" class="btn-3d w-full py-3.5 bg-emerald-400 hover:bg-emerald-300 text-slate-950 font-black text-sm uppercase tracking-wider rounded-2xl mt-2">
+            Começar a jogar 🚀
+          </button>
+
+          <p class="text-[10px] text-emerald-200/60 text-center">Seu progresso fica salvo neste aparelho.</p>
+        </form>
+
+        <div class="text-[10px] text-emerald-300/60 text-center pb-2">
+          EcoQuest &copy; Projeto Educacional Sustentável
+        </div>
       </div>
     </div>
   `;
@@ -337,8 +391,21 @@ function logout() {
   renderLoginView();
 }
 
-function resetProgress() {
-  if (!confirm('Apagar todo o progresso (XP, fases, ofensiva) deste aparelho?')) return;
+// Pede um segundo toque para confirmar (sem janela do navegador)
+let resetArmedUntil = 0;
+function resetProgress(button) {
+  if (Date.now() > resetArmedUntil) {
+    resetArmedUntil = Date.now() + 4000;
+    if (button) {
+      button.innerHTML = 'Toque de novo para apagar';
+      button.classList.add('bg-rose-600', 'text-white', 'border-rose-600');
+      setTimeout(() => {
+        if (document.body.contains(button) && Date.now() > resetArmedUntil) switchTab('creators');
+      }, 4100);
+    }
+    return;
+  }
+  resetArmedUntil = 0;
   save = defaultSave();
   persist();
   renderLoginView();
@@ -376,6 +443,7 @@ function switchTab(tab) {
   if (tab === 'learn') renderLearnTab(viewport);
   else if (tab === 'events') renderEventsTab(viewport);
   else if (tab === 'guide') renderGuideTab(viewport);
+  else if (tab === 'impact') renderImpactTab(viewport);
   else if (tab === 'creators') renderCreatorsTab(viewport);
 
   renderHeader();
@@ -390,23 +458,44 @@ function renderLearnTab(container) {
   const done = LEVELS.filter(l => isLevelCompleted(l.id)).length;
   const percent = Math.round((done / LEVELS.length) * 100);
   const currentIndex = LEVELS.findIndex((l, i) => isLevelUnlocked(i) && !isLevelCompleted(l.id));
-  const zigzag = [0, -56, -28, 28, 56, 28, -28];
+  const zigzag = [0, -56, -28, 28, 56];
+  const { current: rank, next: nextRank, percent: rankPercent } = getRank(save.xp);
 
-  const nodes = LEVELS.map((level, i) => {
+  let posInUnit = 0;
+  const trail = LEVELS.map((level, i) => {
     const unlocked = isLevelUnlocked(i);
     const completed = isLevelCompleted(level.id);
     const isCurrent = i === currentIndex;
-    const offset = zigzag[i % zigzag.length];
+
+    let unitHeader = '';
+    if (level.unit) {
+      posInUnit = 0;
+      const unitLocked = !unlocked;
+      unitHeader = `
+        <div class="w-full z-10 ${i > 0 ? 'mt-4' : ''}">
+          <div class="rounded-2xl px-4 py-3 flex items-center gap-3 shadow-md border-b-4 ${unitLocked ? 'bg-slate-200 border-slate-300 text-slate-500' : 'bg-gradient-to-r from-[#1b4332] to-emerald-700 border-[#081c15] text-white'}">
+            <span class="text-3xl">${unitLocked ? '🔒' : level.unit.emoji}</span>
+            <div>
+              <h3 class="font-black text-sm">${esc(level.unit.title)}</h3>
+              <p class="text-[11px] ${unitLocked ? '' : 'text-emerald-100/90'}">${esc(level.unit.subtitle)}</p>
+            </div>
+          </div>
+        </div>`;
+    }
+    const offset = zigzag[posInUnit % zigzag.length];
+    posInUnit++;
 
     const color = unlocked ? `${level.color} text-white` : 'bg-slate-300 text-slate-500';
     const icon = unlocked ? level.icon : '🔒';
 
     return `
+      ${unitHeader}
       <div class="z-10 flex flex-col items-center" style="transform: translateX(${offset}px)">
-        ${isCurrent ? `<span class="mb-2 bg-white border-2 border-[#1b4332] text-[#1b4332] text-[10px] font-black px-3 py-1 rounded-xl shadow">COMEÇAR</span>` : ''}
+        ${isCurrent ? `<span class="mb-2 bg-white border-2 border-[#1b4332] text-[#1b4332] text-[10px] font-black px-3 py-1 rounded-xl shadow tooltip-down">COMEÇAR</span>` : ''}
         <div class="relative">
+          ${isCurrent ? '<span class="absolute inset-0 rounded-full ring-pulse" aria-hidden="true"></span>' : ''}
           <button onclick="startLevelQuiz('${level.id}')" ${unlocked ? '' : 'disabled'}
-            class="level-node ${color} ${isCurrent ? 'level-current' : ''}"
+            class="level-node relative ${color} ${isCurrent ? 'level-current' : ''}"
             aria-label="${esc(level.title)}${unlocked ? '' : ' (bloqueada)'}">
             ${icon}
           </button>
@@ -442,34 +531,54 @@ function renderLearnTab(container) {
     </button>` : '';
 
   container.innerHTML = `
-    <div class="p-5 space-y-6 pb-24">
+    <div class="p-5 space-y-5 pb-24">
 
-      <div class="bg-gradient-to-br from-[#081c15] via-[#1b4332] to-emerald-800 rounded-3xl p-5 text-white shadow-xl relative overflow-hidden border border-emerald-500/30">
-        <div class="relative z-10">
-          <span class="bg-emerald-500/30 text-emerald-200 text-[10px] font-black uppercase px-2.5 py-1 rounded-full border border-emerald-400/20">Trilha principal</span>
-          <h2 class="text-xl font-black mt-2">Olá, ${esc(save.user.name)}! 👋</h2>
-          <p class="text-xs text-emerald-100 mt-1">${done} de ${LEVELS.length} fases concluídas</p>
-          <div class="mt-2 h-2.5 bg-emerald-950/60 rounded-full overflow-hidden">
-            <div class="h-full bg-emerald-400 rounded-full transition-all" style="width:${percent}%"></div>
+      <div class="bg-gradient-to-br from-[#081c15] via-[#1b4332] to-emerald-700 rounded-3xl p-5 text-white shadow-xl relative overflow-hidden border border-emerald-500/30">
+        <div class="relative z-10 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <h2 class="text-xl font-black">Olá, ${esc(save.user.name)}! 👋</h2>
+            <span class="shrink-0 bg-white/15 border border-white/20 text-[10px] font-black px-2.5 py-1 rounded-full">${rank.icone} ${esc(rank.titulo)}</span>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-[11px] text-emerald-100 font-bold">
+              <span>Trilha</span><span>${done}/${LEVELS.length} fases</span>
+            </div>
+            <div class="mt-1 h-2.5 bg-emerald-950/60 rounded-full overflow-hidden">
+              <div class="h-full bg-emerald-400 rounded-full transition-all" style="width:${percent}%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-[11px] text-amber-100 font-bold">
+              <span>${nextRank ? `Próximo título: ${esc(nextRank.titulo)}` : 'Título máximo alcançado!'}</span>
+              <span>${nextRank ? `${save.xp}/${nextRank.xp} XP` : `${save.xp} XP`}</span>
+            </div>
+            <div class="mt-1 h-2.5 bg-emerald-950/60 rounded-full overflow-hidden">
+              <div class="h-full bg-amber-400 rounded-full transition-all" style="width:${rankPercent}%"></div>
+            </div>
           </div>
         </div>
-        <span class="absolute -right-3 -bottom-3 text-8xl opacity-15" aria-hidden="true">♻️</span>
+        <span class="absolute -right-4 -bottom-6 text-9xl opacity-10" aria-hidden="true">♻️</span>
       </div>
 
       ${livesNotice}
       ${masterBanner}
+      ${factCard(randomItem(FATOS))}
 
       <div class="relative flex flex-col items-center gap-8 py-2">
         <div class="absolute w-2 bg-slate-200 top-8 bottom-8 rounded-full"></div>
-        ${nodes}
+        ${trail}
       </div>
 
-      <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3 shadow-sm">
-        <span class="text-3xl">💡</span>
-        <div class="text-xs text-emerald-950 leading-relaxed">
-          <strong>Dica EcoQuest:</strong> embalagens sujas causam mau cheiro e contaminam outros recicláveis. Sempre passe uma água rápida!
+      <button onclick="switchTab('impact')" class="w-full text-left bg-white border-2 border-emerald-200 rounded-2xl p-4 flex items-center gap-3 shadow-sm press">
+        <span class="text-3xl">🌎</span>
+        <div class="flex-1 text-xs text-slate-700">
+          <strong class="block text-slate-900 text-sm">Por que tudo isso importa?</strong>
+          Veja os números do lixo no Brasil e assuma seus compromissos.
         </div>
-      </div>
+        <i data-lucide="chevron-right" class="w-5 h-5 text-emerald-700"></i>
+      </button>
     </div>
   `;
 }
@@ -606,12 +715,157 @@ function closeGuideModal() {
 
 
 /* =========================================================
-   ABA CRIADORES — os dados ficam em dados.js
+   ABA IMPACTO — por que reciclar importa
    ========================================================= */
+function renderImpactTab(container) {
+  const stats = IMPACTO_STATS.map((s, i) => `
+    <div class="bg-gradient-to-br ${s.cor} text-white rounded-2xl p-4 shadow-md ${i === 0 ? 'col-span-2' : ''}">
+      <span class="text-2xl">${s.icone}</span>
+      <p class="mt-1 leading-none"><span class="text-2xl font-black">${esc(s.valor)}</span> <span class="text-[11px] font-bold opacity-80">${esc(s.unidade)}</span></p>
+      <p class="text-[11px] mt-1 opacity-90 leading-snug">${esc(s.texto)}</p>
+    </div>
+  `).join('');
+
+  const path = CAMINHO_DO_LIXO.map((step, i) => `
+    <div class="flex items-start gap-3">
+      <div class="flex flex-col items-center">
+        <div class="w-11 h-11 rounded-2xl bg-emerald-100 border-2 border-emerald-300 flex items-center justify-center text-xl">${step.icone}</div>
+        ${i < CAMINHO_DO_LIXO.length - 1 ? '<div class="w-1 h-6 bg-emerald-200 rounded-full my-1"></div>' : ''}
+      </div>
+      <div class="pt-1">
+        <h4 class="font-black text-xs text-slate-900">${i + 1}. ${esc(step.titulo)}</h4>
+        <p class="text-[11px] text-slate-600">${esc(step.texto)}</p>
+      </div>
+    </div>
+  `).join('');
+
+  const rs = CINCO_RS.map((item, i) => `
+    <div class="flex items-center gap-3 bg-white border-2 border-slate-200 rounded-2xl p-3">
+      <span class="w-9 h-9 shrink-0 rounded-xl bg-lime-100 flex items-center justify-center text-lg">${item.icone}</span>
+      <div>
+        <h4 class="font-black text-xs text-slate-900">${i + 1}º ${esc(item.r)}</h4>
+        <p class="text-[11px] text-slate-600">${esc(item.texto)}</p>
+      </div>
+    </div>
+  `).join('');
+
+  const pledges = COMPROMISSOS.map(p => {
+    const on = save.pledges.includes(p.id);
+    return `
+      <button onclick="togglePledge('${p.id}')" aria-pressed="${on}"
+        class="w-full text-left flex items-center gap-3 p-3 rounded-2xl border-2 transition-all press ${on ? 'bg-emerald-50 border-emerald-400' : 'bg-white border-slate-200'}">
+        <span class="text-xl">${p.icone}</span>
+        <span class="flex-1 text-xs font-bold ${on ? 'text-emerald-900' : 'text-slate-700'}">${esc(p.texto)}</span>
+        <span class="w-6 h-6 shrink-0 rounded-lg border-2 flex items-center justify-center text-xs font-black ${on ? 'bg-emerald-500 border-emerald-500 text-white' : 'border-slate-300 text-transparent'}">✓</span>
+      </button>`;
+  }).join('');
+
+  const lessons = save.completedLevels.length + save.completedEvents.length;
+
+  container.innerHTML = `
+    <div class="p-5 space-y-6 pb-24">
+      <div class="text-center">
+        <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-emerald-300">Por que reciclar?</span>
+        <h2 class="text-xl font-black text-slate-900 mt-2">O lixo e o planeta 🌍</h2>
+        <p class="text-xs text-slate-500 mt-1">Os números mostram o tamanho do problema, e o quanto a sua atitude conta.</p>
+      </div>
+
+      <section class="space-y-3">
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">📊 O lixo no Brasil</h3>
+        <div class="grid grid-cols-2 gap-3">${stats}</div>
+        <p class="text-[10px] text-slate-400">Fontes: Panorama dos Resíduos Sólidos no Brasil 2025 (Abrema), dados de 2024; Abal e Abralatas (latas, 2024).</p>
+      </section>
+
+      <section class="bg-gradient-to-br from-[#081c15] to-[#1b4332] text-white rounded-3xl p-5 space-y-2 shadow-lg">
+        <h3 class="font-black text-sm">Por que isso importa?</h3>
+        <ul class="text-[12px] text-emerald-50 space-y-1.5 leading-relaxed">
+          <li>🌳 <strong>Poupa a natureza:</strong> menos árvores, minério e petróleo tirados do planeta.</li>
+          <li>⚡ <strong>Economiza energia:</strong> reciclar alumínio gasta cerca de 95% menos energia.</li>
+          <li>🌊 <strong>Protege rios e oceanos:</strong> menos plástico chegando aos animais.</li>
+          <li>🦟 <strong>Cuida da saúde:</strong> lixo largado atrai ratos e mosquitos que transmitem doenças.</li>
+          <li>🤝 <strong>Gera renda:</strong> milhares de catadores vivem da reciclagem.</li>
+        </ul>
+      </section>
+
+      <section class="space-y-3">
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">🚛 O caminho do reciclável</h3>
+        <div class="bg-white border-2 border-slate-200 rounded-2xl p-4">${path}</div>
+      </section>
+
+      <section class="space-y-3">
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">🔁 Os 5 Rs (em ordem de importância)</h3>
+        <div class="space-y-2">${rs}</div>
+      </section>
+
+      <section class="space-y-3">
+        <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">🤝 Meus compromissos</h3>
+        <p class="text-[11px] text-slate-500">Toque para assumir. Cada compromisso novo vale +${XP_PLEDGE} XP.</p>
+        <div class="space-y-2">${pledges}</div>
+      </section>
+
+      <section class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center">
+        <p class="text-[11px] font-bold text-amber-700 uppercase">Seu impacto no EcoQuest</p>
+        <div class="grid grid-cols-3 gap-2 mt-2">
+          <div><span class="block text-xl font-black text-amber-900">${save.totalCorrect}</span><span class="text-[10px] text-amber-800">acertos</span></div>
+          <div><span class="block text-xl font-black text-amber-900">${lessons}</span><span class="text-[10px] text-amber-800">lições</span></div>
+          <div><span class="block text-xl font-black text-amber-900">${save.pledges.length}/${COMPROMISSOS.length}</span><span class="text-[10px] text-amber-800">compromissos</span></div>
+        </div>
+      </section>
+    </div>
+  `;
+}
+
+function togglePledge(id) {
+  const index = save.pledges.indexOf(id);
+  if (index >= 0) {
+    save.pledges.splice(index, 1);
+  } else {
+    save.pledges.push(id);
+    if (!save.pledgesRewarded.includes(id)) {
+      save.pledgesRewarded.push(id);
+      save.xp += XP_PLEDGE;
+      playSound('correct');
+      fireConfetti({ particleCount: 25, spread: 50, origin: { y: 0.8 } });
+    }
+  }
+  persist();
+  const viewport = document.getElementById('app-viewport');
+  const scroll = viewport.scrollTop;
+  renderImpactTab(viewport);
+  viewport.scrollTop = scroll;
+  renderHeader();
+  refreshIcons();
+}
+
+
+/* =========================================================
+   ABA CRIADORES — os dados ficam em dados.js
+   Os avatares são sorteados toda vez que a aba abre.
+   ========================================================= */
+function avatarHTML(index, emoji, color) {
+  return `
+    <button onclick="rerollAvatar(${index})" id="avatar-${index}" title="Toque para trocar o avatar"
+      class="w-14 h-14 shrink-0 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center text-3xl shadow-md border-2 border-white press avatar-pop">
+      ${emoji}
+    </button>`;
+}
+
+function rerollAvatar(index) {
+  const el = document.getElementById(`avatar-${index}`);
+  if (!el) return;
+  const current = el.textContent.trim();
+  let emoji = randomItem(AVATARES);
+  while (emoji === current && AVATARES.length > 1) emoji = randomItem(AVATARES);
+  el.outerHTML = avatarHTML(index, emoji, randomItem(AVATAR_CORES));
+}
+
 function renderCreatorsTab(container) {
-  const people = CRIADORES.map(p => `
+  const emojis = shuffle(AVATARES);
+  const colors = shuffle(AVATAR_CORES);
+
+  const people = CRIADORES.map((p, i) => `
     <div class="bg-white p-3.5 rounded-2xl border-2 border-slate-200 shadow-sm flex items-center gap-3">
-      <div class="w-11 h-11 rounded-full ${p.cor} border flex items-center justify-center text-xl">${p.avatar}</div>
+      ${avatarHTML(i, emojis[i % emojis.length], colors[i % colors.length])}
       <div>
         <h4 class="font-black text-sm text-slate-800">${esc(p.nome)}</h4>
         <p class="text-[11px] text-slate-500">${esc(p.funcao)}</p>
@@ -626,6 +880,8 @@ function renderCreatorsTab(container) {
     </div>
   `).join('');
 
+  const { current: rank } = getRank(save.xp);
+
   container.innerHTML = `
     <div class="p-5 space-y-5 pb-24">
       <div class="text-center">
@@ -637,6 +893,7 @@ function renderCreatorsTab(container) {
       <div class="space-y-3">
         <h3 class="text-xs font-black text-slate-400 uppercase tracking-wider">👥 Integrantes do grupo</h3>
         ${people}
+        <p class="text-[10px] text-slate-400 text-center">🎲 Toque num avatar para sortear outro.</p>
       </div>
 
       <div class="space-y-3">
@@ -649,13 +906,13 @@ function renderCreatorsTab(container) {
         <div class="bg-white p-4 rounded-2xl border-2 border-slate-200 space-y-3">
           <div class="text-xs text-slate-600">
             <p><strong class="text-slate-900">${esc(save.user.name)}</strong>${save.user.email ? ` · ${esc(save.user.email)}` : ''}</p>
-            <p class="mt-1">${save.xp} XP · ${save.completedLevels.length}/${LEVELS.length} fases · ofensiva de ${currentStreak()} dia(s)</p>
+            <p class="mt-1">${rank.icone} ${esc(rank.titulo)} · ${save.xp} XP · ${save.completedLevels.length}/${LEVELS.length} fases · ofensiva de ${currentStreak()} dia(s)</p>
           </div>
           <div class="grid grid-cols-2 gap-2">
             <button onclick="logout()" class="py-2.5 rounded-xl border-2 border-slate-200 text-xs font-bold text-slate-700 press flex items-center justify-center gap-1">
               <i data-lucide="log-out" class="w-4 h-4"></i> Sair
             </button>
-            <button onclick="resetProgress()" class="py-2.5 rounded-xl border-2 border-rose-200 text-xs font-bold text-rose-700 press flex items-center justify-center gap-1">
+            <button onclick="resetProgress(this)" class="py-2.5 rounded-xl border-2 border-rose-200 text-xs font-bold text-rose-700 press flex items-center justify-center gap-1">
               <i data-lucide="rotate-ccw" class="w-4 h-4"></i> Apagar progresso
             </button>
           </div>
@@ -925,6 +1182,8 @@ function checkAnswer(isTimeOut = false) {
     playSound('correct');
     quiz.correctCount++;
     quiz.xpEarned += XP_PER_CORRECT;
+    save.totalCorrect = (save.totalCorrect || 0) + 1;
+    persist();
     banner.className = 'absolute bottom-0 inset-x-0 p-4 pb-6 z-40 border-t-2 shadow-2xl bg-emerald-100 border-emerald-600 text-emerald-950';
     icon.textContent = '🎉';
     title.textContent = 'Acertou em cheio!';
@@ -950,6 +1209,15 @@ function checkAnswer(isTimeOut = false) {
     msg.textContent = `Resposta certa: ${correctText}. ${q.explanation}`;
     btn.className = 'w-full mt-3 py-3 rounded-xl bg-rose-600 text-white font-black text-sm shadow-md press flex items-center justify-center gap-2';
     btnText.textContent = (!quiz.practice && save.lives <= 0) ? 'Ver resultado' : 'Continuar';
+  }
+
+  // "Por que importa": aparece nas perguntas que têm o campo impact
+  const impactEl = document.getElementById('feedback-impact');
+  if (q.impact) {
+    impactEl.textContent = `🌍 Por que importa: ${q.impact}`;
+    impactEl.classList.remove('hidden');
+  } else {
+    impactEl.classList.add('hidden');
   }
 
   renderHeader();
@@ -1021,7 +1289,10 @@ function renderQuizCompletion() {
   }
 
   const totalXp = quiz.xpEarned + bonus;
+  const rankBefore = getRank(save.xp).current;
   save.xp += totalXp;
+  const rankAfter = getRank(save.xp).current;
+  const rankUp = rankAfter.xp !== rankBefore.xp;
   const streakUp = registerPlayToday();
   persist();
   renderHeader();
@@ -1053,6 +1324,10 @@ function renderQuizCompletion() {
       </div>
 
       ${extraLine ? `<p class="text-xs font-bold text-[#1b4332] bg-emerald-50 border border-emerald-200 rounded-xl px-3 py-2 max-w-xs">${esc(extraLine)}</p>` : ''}
+
+      ${rankUp ? `<p class="text-xs font-black text-amber-900 bg-amber-100 border border-amber-300 rounded-xl px-3 py-2 max-w-xs">🎖️ Novo título: ${rankAfter.icone} ${esc(rankAfter.titulo)}!</p>` : ''}
+
+      <div class="w-full max-w-xs text-left">${factCard(randomItem(FATOS))}</div>
 
       <button onclick="switchTab('${quiz.returnTab}')" class="w-full max-w-xs py-3.5 bg-[#1b4332] hover:bg-[#081c15] text-white font-black text-sm rounded-2xl shadow-xl press">
         ${returnLabel}

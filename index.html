@@ -66,6 +66,10 @@
         <div class="p-1 rounded-xl"><i data-lucide="book-open" class="w-5 h-5"></i></div>
         <span class="text-[10px]">Guia Lixo</span>
       </button>
+      <button onclick="switchTab('impact')" id="nav-impact" class="nav-btn flex flex-col items-center gap-1">
+        <div class="p-1 rounded-xl"><i data-lucide="globe" class="w-5 h-5"></i></div>
+        <span class="text-[10px]">Impacto</span>
+      </button>
       <button onclick="switchTab('creators')" id="nav-creators" class="nav-btn flex flex-col items-center gap-1">
         <div class="p-1 rounded-xl"><i data-lucide="users" class="w-5 h-5"></i></div>
         <span class="text-[10px]">Criadores</span>
@@ -79,6 +83,7 @@
         <div class="flex-1">
           <h4 id="feedback-title" class="font-extrabold text-base"></h4>
           <p id="feedback-msg" class="text-xs mt-0.5 leading-relaxed"></p>
+          <p id="feedback-impact" class="hidden text-[11px] mt-2 font-bold leading-relaxed bg-white/60 rounded-lg px-2 py-1.5"></p>
         </div>
       </div>
       <button id="feedback-btn" onclick="nextQuestion()" class="w-full mt-3 py-3 rounded-xl text-white font-black text-sm shadow-md press flex items-center justify-center gap-2">

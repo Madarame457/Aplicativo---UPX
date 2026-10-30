@@ -11,11 +11,29 @@
 /* ---------------------------------------------------------
    ✏️ CRIADORES — coloquem aqui os nomes e funções do grupo
    (aparece na aba "Criadores")
+   O avatar é sorteado da lista AVATARES toda vez que a aba abre,
+   e muda de novo quando você toca nele.
    --------------------------------------------------------- */
 const CRIADORES = [
-  { nome: "Arthur Ribeiro",  funcao: "Desenvolvedor",  avatar: "👨‍💻", cor: "bg-emerald-100 border-emerald-300" },
-  { nome: "Gabriel Tonetto", funcao: "Desenvolvedor",  avatar: "🧑‍🎨", cor: "bg-teal-100 border-teal-300" },
-  { nome: "Vito Graziosi",   funcao: "Desenvolvedor",  avatar: "🧑‍🔬", cor: "bg-amber-100 border-amber-300" }
+  { nome: "Arthur Ribeiro",  funcao: "Desenvolvedor" },
+  { nome: "Gabriel Tonetto", funcao: "Desenvolvedor" },
+  { nome: "Vito Graziosi",   funcao: "Desenvolvedor" }
+];
+
+// Avatares possíveis para os criadores (os mascotes e bichos do app)
+const AVATARES = [
+  "🦫", "🦝", "🦈", "🐊", "🐶", "🗿", "🥁", "🩰", "🌳", "🐢",
+  "🐙", "🦉", "🐸", "🦊", "🐼", "🐝", "🦜", "🐳", "🌵", "🍄"
+];
+
+// Cores de fundo sorteadas junto com o avatar
+const AVATAR_CORES = [
+  "from-emerald-400 to-teal-600",
+  "from-amber-300 to-orange-500",
+  "from-sky-400 to-indigo-600",
+  "from-pink-400 to-rose-600",
+  "from-lime-300 to-green-600",
+  "from-violet-400 to-purple-700"
 ];
 
 
@@ -302,6 +320,7 @@ const GUIDE_DATABASE = {
 const LEVELS = [
   {
     id: "level_1",
+    unit: { title: "Unidade 1 · Separar certo", subtitle: "As cores e o que vai em cada lixeira", emoji: "🗑️" },
     title: "Fase 1: Chill Guy e as Cores",
     icon: "🐶",
     color: "bg-emerald-600",
@@ -561,6 +580,263 @@ const LEVELS = [
         explanation: "MARROM! Você é um mestre da compostagem."
       }
     ]
+  },
+
+  /* ===== UNIDADE 2 — POR QUE RECICLAR IMPORTA ===== */
+  {
+    id: "level_6",
+    unit: { title: "Unidade 2 · Por que reciclar importa", subtitle: "O impacto do lixo no Brasil e no planeta", emoji: "🌍" },
+    title: "Fase 6: Os 5 Rs da Sustentabilidade",
+    icon: "🔁",
+    color: "bg-lime-600",
+    questions: [
+      {
+        type: "choice",
+        mascot: { ...M.chillGuy, quote: "Relaxa, mas presta atenção: os 5 Rs são Repensar, Recusar, Reduzir, Reutilizar e Reciclar. Qual vem por ÚLTIMO?" },
+        question: "Nos 5 Rs, qual atitude deve ser a ÚLTIMA opção?",
+        options: ["Reduzir", "Reciclar", "Recusar", "Repensar"],
+        correct: 1,
+        explanation: "Reciclar é ótimo, mas é a última etapa. O melhor lixo é aquele que nem chega a existir!",
+        impact: "Reciclar também gasta energia e água. Evitar o lixo poupa tudo isso."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.ballerina, quote: "Vou ao mercado dançando com minha sacola de pano! Qual R eu estou praticando?" },
+        question: "Levar a própria sacola ao mercado e dispensar a sacolinha plástica é:",
+        options: ["Recusar", "Reciclar", "Reutilizar só o plástico", "Nenhum R"],
+        correct: 0,
+        explanation: "É RECUSAR: dizer não para o descartável que você nem precisa."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.capivara, quote: "🤫 Transformei o pote de vidro de azeitona em porta-lápis. Qual R é esse?" },
+        question: "Transformar um pote de vidro em porta-lápis é:",
+        options: ["Reciclar", "Reutilizar", "Recusar", "Repensar"],
+        correct: 1,
+        explanation: "REUTILIZAR: dar um novo uso para o objeto sem precisar processá-lo de novo."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.sixSeven, quote: "Six seven! Verdadeiro ou falso: comprar refil de sabonete líquido é reduzir o lixo?" },
+        question: "Verdadeiro ou falso: comprar refil em vez de um frasco novo ajuda a REDUZIR o lixo.",
+        options: ["Verdadeiro", "Falso"],
+        correct: 0,
+        explanation: "Verdadeiro! O refil usa muito menos embalagem que um frasco novo."
+      },
+      {
+        type: "write",
+        mascot: { ...M.gigachad, quote: "Um Chad não joga fora o que ainda serve. Qual R é usar de novo um objeto?" },
+        question: "Digite o R que significa usar de novo um objeto, dando outra função para ele:",
+        correctAnswer: ["reutilizar", "reutilização", "reusar"],
+        explanation: "REUTILIZAR!"
+      }
+    ]
+  },
+  {
+    id: "level_7",
+    title: "Fase 7: O Caminho do Lixo",
+    icon: "🚛",
+    color: "bg-sky-600",
+    questions: [
+      {
+        type: "choice",
+        mascot: { ...M.bombardiro, quote: "Bombardiro sobrevoando a cidade! O caminhão da coleta seletiva levou os recicláveis. Pra onde vão primeiro?" },
+        question: "Depois da coleta seletiva, os recicláveis vão primeiro para:",
+        options: ["Direto para o oceano", "Uma central de triagem, onde são separados", "A casa do vizinho", "Um forno para queimar tudo"],
+        correct: 1,
+        explanation: "Na triagem, os materiais são separados por tipo, prensados e vendidos para a indústria transformar em produtos novos."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.tungTung, quote: "TUNG TUNG! Quem são os heróis que fazem grande parte da reciclagem no Brasil?!" },
+        question: "Quem é responsável por boa parte do material reciclado no Brasil?",
+        options: ["Robôs gigantes", "Os catadores e as cooperativas de reciclagem", "Só as prefeituras", "Ninguém, o lixo se separa sozinho"],
+        correct: 1,
+        explanation: "Os catadores e as cooperativas recolhem e separam grande parte do que é reciclado no país.",
+        impact: "Separar o lixo direito deixa o trabalho deles mais seguro e aumenta a renda dessas famílias."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.sideEye, quote: "Olhando torto pro lixão… qual a diferença dele para um aterro sanitário?" },
+        question: "Qual a diferença entre lixão e aterro sanitário?",
+        options: [
+          "Nenhuma, é tudo igual",
+          "O aterro tem o solo protegido e trata o líquido do lixo; o lixão não tem proteção nenhuma",
+          "O lixão é mais moderno",
+          "O aterro fica no oceano"
+        ],
+        correct: 1,
+        explanation: "No aterro sanitário o solo é impermeabilizado e o chorume é tratado. No lixão, tudo contamina a terra e a água."
+      },
+      {
+        type: "timer",
+        timeLimit: 8,
+        mascot: { ...M.patapim, quote: "Brr brr patapim! Rápido: o lixo misturado chega na triagem todo sujo. O que acontece?" },
+        question: "PENSE RÁPIDO! O que acontece com o reciclável que chega sujo de comida?",
+        options: ["Muitas vezes é descartado e vira rejeito", "Fica mais valioso", "Vira ouro", "Nada muda"],
+        correct: 0,
+        explanation: "Material sujo perde valor e muitas vezes vai para o aterro. Por isso vale enxaguar!"
+      },
+      {
+        type: "write",
+        mascot: { ...M.caseOh, quote: "Sabe aquele líquido escuro e fedido que escorre do lixo? Como chama?" },
+        question: "Digite o nome do líquido tóxico que escorre do lixo em decomposição:",
+        correctAnswer: ["chorume"],
+        explanation: "CHORUME! Ele contamina o solo e a água quando o lixo vai para lixões."
+      }
+    ]
+  },
+  {
+    id: "level_8",
+    title: "Fase 8: O Lixo do Brasil em Números",
+    icon: "📊",
+    color: "bg-indigo-600",
+    questions: [
+      {
+        type: "choice",
+        mascot: { ...M.pedro, quote: "PEDRO PEDRO! Chuta aí: quanto do lixo das cidades o Brasil recicla?" },
+        question: "Mais ou menos quanto do lixo urbano o Brasil recicla?",
+        options: ["Menos de 10%", "Cerca de 30%", "Cerca de 60%", "Quase 100%"],
+        correct: 0,
+        explanation: "Só cerca de 8,7% do lixo urbano foi para a reciclagem em 2024 (Panorama Abrema 2025).",
+        impact: "Ainda tem MUITO espaço para melhorar, e começa na sua casa."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.caseOh, quote: "Quanto lixo uma pessoa produz por dia no Brasil, em média?" },
+        question: "Em média, quanto lixo cada brasileiro produz por dia?",
+        options: ["50 gramas", "Pouco mais de 1 kg", "10 kg", "100 kg"],
+        correct: 1,
+        explanation: "Cerca de 1,24 kg por pessoa por dia, o que dá mais de 380 kg por ano (Panorama Abrema 2025)."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.gigachad, quote: "O Brasil é CAMPEÃO em reciclar uma coisa. Qual?" },
+        question: "O Brasil recicla quase 100% de qual material?",
+        options: ["Isopor", "Latinhas de alumínio", "Bitucas de cigarro", "Fraldas"],
+        correct: 1,
+        explanation: "Em 2024, o Brasil reciclou 97,3% das latinhas de alumínio!",
+        impact: "Isso acontece porque a latinha vale dinheiro e tem uma rede enorme de catadores. Dá pra fazer o mesmo com outros materiais."
+      },
+      {
+        type: "timer",
+        timeLimit: 8,
+        mascot: { ...M.tungTung, quote: "TUNG TUNG! Quanto do lixo do Brasil ainda vai pra lugar errado, tipo lixão?!" },
+        question: "PENSE RÁPIDO! Que parte do lixo brasileiro ainda tem destino inadequado (como lixões)?",
+        options: ["Quase nada", "Cerca de 40%", "Exatamente 100%", "Só 1%"],
+        correct: 1,
+        explanation: "Cerca de 40% do lixo ainda vai para destinos inadequados, como lixões (Panorama Abrema 2025)."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.capivara, quote: "🤫 Somando tudo, quanto lixo urbano o Brasil gerou em 2024?" },
+        question: "Quanto lixo urbano o Brasil gerou em 2024?",
+        options: ["Cerca de 8 mil toneladas", "Cerca de 81 milhões de toneladas", "Cerca de 1 tonelada", "Cerca de 1 trilhão de toneladas"],
+        correct: 1,
+        explanation: "Foram cerca de 81,6 milhões de toneladas em um ano!"
+      }
+    ]
+  },
+  {
+    id: "level_9",
+    title: "Fase 9: Oceanos e Microplástico",
+    icon: "🌊",
+    color: "bg-cyan-600",
+    questions: [
+      {
+        type: "choice",
+        mascot: { ...M.tralalero, quote: "Tralalero tralala! Eu moro no mar e tô vendo uns pedacinhos de plástico minúsculos. O que é isso?" },
+        question: "O que é microplástico?",
+        options: ["Um plástico muito resistente", "Pedacinhos de plástico menores que 5 mm", "Plástico feito de plantas", "Um tipo de alga"],
+        correct: 1,
+        explanation: "Microplásticos são fragmentos menores que 5 mm. Eles se espalham pela água, pelo solo e até pela comida.",
+        impact: "O plástico não some: ele só vai quebrando em pedaços cada vez menores."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.ballerina, quote: "Verdadeiro ou falso: tartarugas confundem sacolinhas plásticas com águas-vivas e comem." },
+        question: "Verdadeiro ou falso: tartarugas marinhas podem confundir sacolas plásticas com águas-vivas.",
+        options: ["Verdadeiro", "Falso"],
+        correct: 0,
+        explanation: "Verdadeiro! Isso pode machucar ou matar o animal."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.hawkTuah, quote: "Tuah! Qual desses é um dos lixos que mais aparece nas praias?" },
+        question: "Qual destes está entre os lixos mais encontrados nas praias?",
+        options: ["Bitucas de cigarro", "Pianos", "Geladeiras", "Livros"],
+        correct: 0,
+        explanation: "Bitucas de cigarro estão entre os itens mais recolhidos nas limpezas de praia. Elas têm plástico e substâncias tóxicas."
+      },
+      {
+        type: "timer",
+        timeLimit: 7,
+        mascot: { ...M.bombardiro, quote: "Rápido! Como a maior parte do plástico chega no mar?" },
+        question: "PENSE RÁPIDO! Como boa parte do lixo plástico chega ao mar?",
+        options: ["Por rios, bueiros e lixo jogado na rua", "Cai do céu", "Os peixes trazem", "Só por navios"],
+        correct: 0,
+        explanation: "O lixo jogado na rua desce pelos bueiros e rios até chegar ao oceano."
+      },
+      {
+        type: "write",
+        mascot: { ...M.tralalero, quote: "Última! Como se chama o plástico em pedacinhos menores que 5 mm?" },
+        question: "Digite o nome dos pedacinhos de plástico menores que 5 mm:",
+        correctAnswer: ["microplastico", "microplasticos"],
+        explanation: "MICROPLÁSTICO!"
+      }
+    ]
+  },
+  {
+    id: "level_10",
+    title: "Fase 10: Consumo Consciente",
+    icon: "🛒",
+    color: "bg-rose-600",
+    questions: [
+      {
+        type: "choice",
+        mascot: { ...M.chillGuy, quote: "Tô no mercado, tranquilo. Qual dessas compras gera MENOS lixo?" },
+        question: "Qual opção gera MENOS lixo?",
+        options: ["Biscoitos embalados um por um", "Comprar a granel com seu próprio pote", "Garrafinhas de 200 ml", "Comprar e jogar fora"],
+        correct: 1,
+        explanation: "Comprar a granel com seu pote evita embalagens."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.tungTung, quote: "TUNG TUNG! Meu fone quebrou. Qual a primeira coisa a pensar?" },
+        question: "Seu fone quebrou. O que é melhor tentar primeiro?",
+        options: ["Jogar no lixo comum", "Ver se dá para consertar", "Enterrar", "Jogar no rio"],
+        correct: 1,
+        explanation: "Consertar faz o objeto durar mais. Se não der, leve ao ponto de coleta de eletrônicos."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.sideEye, quote: "Hm… você sabe o que é logística reversa?" },
+        question: "O que é logística reversa?",
+        options: [
+          "Dirigir de ré",
+          "As empresas recebem de volta produtos como pilhas, pneus e eletrônicos para dar o destino certo",
+          "Mandar o lixo para outro país",
+          "Queimar o lixo ao contrário"
+        ],
+        correct: 1,
+        explanation: "A Política Nacional de Resíduos Sólidos (Lei 12.305/2010) obriga fabricantes e lojas a receber de volta vários produtos usados."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.sixSeven, quote: "Six seven! Garrafinha reutilizável ou garrafa descartável todo dia?" },
+        question: "Verdadeiro ou falso: usar uma garrafinha reutilizável evita centenas de garrafas descartáveis por ano.",
+        options: ["Verdadeiro", "Falso"],
+        correct: 0,
+        explanation: "Verdadeiro! Quem compra uma garrafinha por dia joga fora mais de 300 por ano."
+      },
+      {
+        type: "write",
+        mascot: { ...M.gigachad, quote: "Qual palavra significa comprar o pacotinho que recarrega a embalagem que você já tem?" },
+        question: "Digite o nome da embalagem que recarrega a que você já tem (de sabonete, detergente…):",
+        correctAnswer: ["refil", "refis"],
+        explanation: "REFIL! Menos plástico, mesmo produto."
+      }
+    ]
   }
 ];
 
@@ -658,6 +934,265 @@ const EVENTS = [
     ]
   },
   {
+    id: "mito_verdade",
+    badge: "MITO OU VERDADE",
+    title: "Caçadores de Mitos do Lixo",
+    subtitle: "Descubra o que é lenda e o que é fato!",
+    icon: "🤔",
+    style: "from-sky-600 to-indigo-700 border-sky-400/40",
+    questions: [
+      {
+        type: "choice",
+        mascot: { ...M.sideEye, quote: "Tem gente que diz que precisa lavar o reciclável com detergente. Mito ou verdade?" },
+        question: "É preciso lavar os recicláveis com detergente e esponja?",
+        options: ["Verdade", "Mito"],
+        correct: 1,
+        explanation: "Mito! Basta uma enxaguada rápida para tirar o excesso. Dá pra usar até a água que sobrou da louça."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.gigachad, quote: "Dizem que o vidro perde qualidade toda vez que é reciclado. Mito ou verdade?" },
+        question: "O vidro perde qualidade a cada reciclagem?",
+        options: ["Verdade", "Mito"],
+        correct: 1,
+        explanation: "Mito! O vidro pode ser reciclado infinitas vezes sem perder qualidade."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.chillGuy, quote: "E aquela de que reciclar alumínio economiza muita energia?" },
+        question: "Reciclar alumínio economiza muita energia em comparação a fabricar do zero?",
+        options: ["Verdade", "Mito"],
+        correct: 0,
+        explanation: "Verdade! A economia é de cerca de 95% da energia."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.capivara, quote: "🤫 Separar o lixo em casa não adianta nada, porque é tudo misturado depois. Mito ou verdade?" },
+        question: "Separar o lixo em casa não faz diferença?",
+        options: ["Verdade", "Mito"],
+        correct: 1,
+        explanation: "Mito! O material separado e limpo é muito mais aproveitado e ajuda os catadores e as cooperativas.",
+        impact: "Onde não há coleta seletiva, vale procurar um ecoponto ou uma cooperativa na sua cidade."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.pedro, quote: "Plástico biodegradável pode ser jogado na natureza, que some rapidinho. Mito ou verdade?" },
+        question: "Plástico 'biodegradável' pode ser jogado na natureza sem problema?",
+        options: ["Verdade", "Mito"],
+        correct: 1,
+        explanation: "Mito! Muitos só se decompõem em condições especiais de compostagem industrial. Na natureza, continuam poluindo."
+      }
+    ]
+  },
+  {
+    id: "separa_rapido",
+    badge: "BLITZ RELÂMPAGO",
+    title: "Separa Rápido: 4 Segundos!",
+    subtitle: "Diga a lixeira certa antes do tempo acabar!",
+    icon: "⚡",
+    style: "from-yellow-500 to-orange-600 border-yellow-300/40",
+    questions: [
+      {
+        type: "timer", timeLimit: 4,
+        mascot: { ...M.pedro, quote: "PEDRO! Casca de banana!" },
+        question: "Casca de banana:",
+        options: ["Marrom", "Azul", "Vermelho"],
+        correct: 0,
+        explanation: "Orgânico: MARROM."
+      },
+      {
+        type: "timer", timeLimit: 4,
+        mascot: { ...M.pedro, quote: "PEDRO! Jornal velho!" },
+        question: "Jornal velho e seco:",
+        options: ["Verde", "Azul", "Amarelo"],
+        correct: 1,
+        explanation: "Papel: AZUL."
+      },
+      {
+        type: "timer", timeLimit: 4,
+        mascot: { ...M.pedro, quote: "PEDRO! Garrafa PET!" },
+        question: "Garrafa PET:",
+        options: ["Vermelho", "Marrom", "Verde"],
+        correct: 0,
+        explanation: "Plástico: VERMELHO."
+      },
+      {
+        type: "timer", timeLimit: 4,
+        mascot: { ...M.pedro, quote: "PEDRO! Lata de milho!" },
+        question: "Lata de milho vazia:",
+        options: ["Azul", "Cinza", "Amarelo"],
+        correct: 2,
+        explanation: "Metal: AMARELO."
+      },
+      {
+        type: "timer", timeLimit: 4,
+        mascot: { ...M.pedro, quote: "PEDRO! Pote de geleia de vidro!" },
+        question: "Pote de geleia de vidro:",
+        options: ["Verde", "Vermelho", "Marrom"],
+        correct: 0,
+        explanation: "Vidro: VERDE."
+      },
+      {
+        type: "timer", timeLimit: 4,
+        mascot: { ...M.pedro, quote: "PEDRO! Fralda usada!" },
+        question: "Fralda usada:",
+        options: ["Azul", "Cinza", "Vermelho"],
+        correct: 1,
+        explanation: "Rejeito: CINZA."
+      }
+    ]
+  },
+  {
+    id: "brainrot_squad",
+    badge: "BRAINROT SQUAD",
+    title: "O Esquadrão Brainrot",
+    subtitle: "Tralalero, Bombardiro e a turma testam você!",
+    icon: "🦈",
+    style: "from-fuchsia-600 to-purple-800 border-fuchsia-400/40",
+    questions: [
+      {
+        type: "choice",
+        mascot: { ...M.tralalero, quote: "Tralalero tralala! Achei uma rede de pesca na praia. Isso é perigoso pros bichos do mar?" },
+        question: "Redes de pesca abandonadas no mar são perigosas?",
+        options: ["Não, os peixes gostam", "Sim, prendem e machucam animais marinhos"],
+        correct: 1,
+        explanation: "Sim! Redes abandonadas prendem tartarugas, golfinhos e peixes."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.bombardiro, quote: "Bombardiro Crocodilo bombardeando lixo no lugar certo! Onde vai o pneu velho?" },
+        question: "Onde descartar um pneu velho?",
+        options: ["Num terreno baldio", "Em borracharias ou pontos de coleta de pneus", "No rio", "Na lixeira azul"],
+        correct: 1,
+        explanation: "Pneus entram na logística reversa: lojas e borracharias recebem de volta. Largados, acumulam água e viram criadouro do mosquito da dengue!"
+      },
+      {
+        type: "choice",
+        mascot: { ...M.patapim, quote: "Brr brr patapim! Eu sou uma árvore. Reciclar papel ajuda as florestas?" },
+        question: "Por que reciclar papel ajuda o meio ambiente?",
+        options: ["Diminui a necessidade de matéria-prima nova, água e energia", "Não ajuda em nada", "Faz as árvores crescerem mais rápido", "Deixa o papel mais caro"],
+        correct: 0,
+        explanation: "Papel reciclado usa menos madeira, água e energia do que papel novo."
+      },
+      {
+        type: "write",
+        mascot: { ...M.tungTung, quote: "TUNG TUNG TUNG SAHUR! Digita onde levar pilha velha!" },
+        question: "Digite o nome do local da prefeitura que recebe entulho, pilhas, eletrônicos e outros resíduos especiais:",
+        correctAnswer: ["ecoponto", "ecopontos", "eco ponto"],
+        explanation: "ECOPONTO! Muitas cidades têm um. Procure o mais perto de você."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.ballerina, quote: "Ballerina Cappuccina terminou o cappuccino. A borra de café vai onde?" },
+        question: "A borra de café vai para:",
+        options: ["Azul (Papel)", "Marrom (Orgânico) ou composteira", "Vermelho (Plástico)", "Laranja (Perigoso)"],
+        correct: 1,
+        explanation: "Orgânico! E é ótima para a composteira e para as plantas."
+      }
+    ]
+  },
+  {
+    id: "detetive",
+    badge: "MODO DIFÍCIL",
+    title: "Detetive do Lixo 🔎",
+    subtitle: "Itens que enganam até os adultos!",
+    icon: "🕵️",
+    style: "from-slate-700 to-slate-900 border-slate-400/40",
+    questions: [
+      {
+        type: "choice",
+        mascot: { ...M.sideEye, quote: "Esse cupom fiscal brilhante do mercado… vai no papel?" },
+        question: "Cupom fiscal (aquele papel térmico brilhante) vai em:",
+        options: ["Azul (Papel)", "Cinza (Rejeito)"],
+        correct: 1,
+        explanation: "O papel térmico tem químicos que atrapalham a reciclagem. Vai no rejeito."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.caseOh, quote: "Pacote de salgadinho, por dentro prateado. E agora?" },
+        question: "Na maioria das cidades, o pacote de salgadinho metalizado vai para:",
+        options: ["Amarelo (Metal)", "Rejeito, porque mistura plástico e alumínio e é difícil de reciclar"],
+        correct: 1,
+        explanation: "Ele parece metal, mas é plástico com uma película fina de alumínio. Poucos lugares reciclam: na dúvida, rejeito."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.chillGuy, quote: "Caixa de ovo de papelão, limpinha. Onde vai?" },
+        question: "Caixa de ovo de papelão limpa vai em:",
+        options: ["Azul (Papel) ou composteira", "Laranja (Perigoso)", "Verde (Vidro)", "Vermelho (Plástico)"],
+        correct: 0,
+        explanation: "É papel! Vai no azul, e também pode ir para a composteira."
+      },
+      {
+        type: "timer",
+        timeLimit: 8,
+        mascot: { ...M.hawkTuah, quote: "Tuah! Termômetro antigo de mercúrio quebrou! E agora?!" },
+        question: "PENSE RÁPIDO! Termômetro de mercúrio quebrado:",
+        options: ["Lixo comum", "Resíduo perigoso: embalar bem e levar a ponto de coleta", "Vidro verde", "Pia"],
+        correct: 1,
+        explanation: "Mercúrio é muito tóxico. Não toque, embale bem e leve a um ponto de coleta de resíduos perigosos."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.gigachad, quote: "Copo descartável de plástico, limpo. Recicla?" },
+        question: "Copo plástico descartável limpo vai em:",
+        options: ["Vermelho (Plástico)", "Marrom (Orgânico)"],
+        correct: 0,
+        explanation: "É plástico e vai no vermelho. Mas melhor ainda é usar um copo reutilizável!"
+      }
+    ]
+  },
+  {
+    id: "missao_planeta",
+    badge: "MISSÃO PLANETA",
+    title: "Por que reciclar? 🌍",
+    subtitle: "O quiz sobre o impacto real da reciclagem.",
+    icon: "🌎",
+    style: "from-emerald-600 to-teal-800 border-emerald-300/40",
+    questions: [
+      {
+        type: "choice",
+        mascot: { ...M.capivara, quote: "🤫 Pense bem: qual destes NÃO é um benefício da reciclagem?" },
+        question: "Qual destes NÃO é um benefício da reciclagem?",
+        options: ["Economiza recursos naturais", "Gera trabalho e renda", "Diminui o lixo nos aterros", "Aumenta a poluição dos rios"],
+        correct: 3,
+        explanation: "A reciclagem DIMINUI a poluição. Todas as outras opções são benefícios reais."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.tungTung, quote: "TUNG TUNG! Lixo parado em lixão atrai o quê?!" },
+        question: "Lixo acumulado a céu aberto atrai:",
+        options: ["Ratos, baratas e mosquitos que transmitem doenças", "Borboletas raras", "Turistas", "Nada"],
+        correct: 0,
+        explanation: "Lixões espalham doenças como leptospirose e dengue.",
+        impact: "Descartar certo também é cuidar da saúde de toda a cidade."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.patapim, quote: "Brr brr! O que a compostagem evita que vá para a atmosfera?" },
+        question: "Compostar o lixo orgânico ajuda o clima porque:",
+        options: ["Evita a produção de metano nos aterros", "Esfria o planeta na hora", "Produz plástico", "Aumenta a fumaça"],
+        correct: 0,
+        explanation: "O orgânico apodrecendo nos aterros solta metano, um gás que aquece muito o planeta."
+      },
+      {
+        type: "choice",
+        mascot: { ...M.sixSeven, quote: "Six seven! Uma latinha reciclada pode voltar pra prateleira em quanto tempo?" },
+        question: "Uma latinha reciclada pode voltar ao mercado como lata nova em cerca de:",
+        options: ["60 dias", "100 anos", "Nunca", "500 anos"],
+        correct: 0,
+        explanation: "O ciclo da latinha é rápido: em cerca de 2 meses ela pode estar de volta à prateleira."
+      },
+      {
+        type: "write",
+        mascot: { ...M.gigachad, quote: "Qual é a única coisa que precisa mudar para o mundo ter menos lixo? Dica: começa com 'h'." },
+        question: "Complete: o planeta muda quando mudamos nossos ____ (dica: começa com H).",
+        correctAnswer: ["habitos", "habito"],
+        explanation: "HÁBITOS! Separar, reduzir e reutilizar todo dia faz a diferença. 💚"
+      }
+    ]
+  },
+  {
     id: "boss_final",
     badge: "CHEFÃO FINAL",
     title: "O Desafio Supremo",
@@ -701,4 +1236,70 @@ const EVENTS = [
       }
     ]
   }
+];
+
+
+/* ---------------------------------------------------------
+   POR QUE RECICLAR IMPORTA (aba "Impacto")
+   Fontes: Panorama dos Resíduos Sólidos no Brasil 2025 (Abrema),
+   dados de 2024; Abal/Abralatas (latas de alumínio, 2024).
+   --------------------------------------------------------- */
+const IMPACTO_STATS = [
+  { valor: "81,6 mi", unidade: "toneladas", texto: "de lixo urbano gerado no Brasil em 2024", icone: "🏙️", cor: "from-slate-700 to-slate-900" },
+  { valor: "8,7%",    unidade: "do lixo",   texto: "foi para a reciclagem. O resto foi enterrado ou largado", icone: "♻️", cor: "from-emerald-600 to-emerald-800" },
+  { valor: "40%",     unidade: "do lixo",   texto: "ainda tem destino inadequado, como lixões", icone: "⚠️", cor: "from-rose-600 to-rose-800" },
+  { valor: "1,24 kg", unidade: "por dia",   texto: "de lixo produzido por cada brasileiro, em média", icone: "🧍", cor: "from-amber-500 to-orange-700" },
+  { valor: "97,3%",   unidade: "das latas", texto: "de alumínio foram recicladas: prova de que dá certo!", icone: "🥫", cor: "from-sky-600 to-indigo-700" }
+];
+
+const CINCO_RS = [
+  { r: "Repensar",   icone: "🧠", texto: "Eu preciso mesmo disso? Pense antes de comprar." },
+  { r: "Recusar",    icone: "✋", texto: "Diga não a canudos, sacolinhas e brindes descartáveis." },
+  { r: "Reduzir",    icone: "📉", texto: "Prefira refil, produtos a granel e menos embalagem." },
+  { r: "Reutilizar", icone: "🔁", texto: "Dê uma nova função para potes, vidros e roupas." },
+  { r: "Reciclar",   icone: "♻️", texto: "O que sobrar, separe limpo na lixeira certa." }
+];
+
+const CAMINHO_DO_LIXO = [
+  { icone: "🏠", titulo: "Você separa", texto: "Recicláveis limpos e secos, longe do orgânico." },
+  { icone: "🚛", titulo: "Coleta seletiva", texto: "O caminhão, um ecoponto ou um catador recolhe." },
+  { icone: "🧤", titulo: "Triagem", texto: "Catadores e cooperativas separam por material." },
+  { icone: "🏭", titulo: "Indústria", texto: "O material é derretido, moído ou desfeito." },
+  { icone: "🛍️", titulo: "Produto novo", texto: "Volta para a loja e o ciclo recomeça!" }
+];
+
+// Compromissos que o jogador pode assumir (ganha XP na primeira vez)
+const COMPROMISSOS = [
+  { id: "separar_casa", icone: "🗑️", texto: "Vou separar o lixo reciclável em casa" },
+  { id: "sacola",       icone: "👜", texto: "Vou levar minha própria sacola às compras" },
+  { id: "garrafinha",   icone: "🧴", texto: "Vou usar uma garrafinha reutilizável" },
+  { id: "pilhas",       icone: "🔋", texto: "Vou levar pilhas e eletrônicos a um ponto de coleta" },
+  { id: "oleo",         icone: "🍳", texto: "Não vou jogar óleo de cozinha na pia" },
+  { id: "contar",       icone: "📣", texto: "Vou ensinar alguém a separar o lixo" }
+];
+
+// "Você sabia?" — um aparece sorteado na trilha e no fim de cada lição
+const FATOS = [
+  "Só cerca de 8,7% do lixo urbano do Brasil vai para a reciclagem.",
+  "O Brasil reciclou 97,3% das latinhas de alumínio em 2024.",
+  "Cada brasileiro produz, em média, 1,24 kg de lixo por dia.",
+  "Cerca de 40% do lixo brasileiro ainda vai para lugares inadequados, como lixões.",
+  "Reciclar alumínio gasta cerca de 95% menos energia do que produzir alumínio novo.",
+  "O vidro pode ser reciclado infinitas vezes sem perder qualidade.",
+  "O plástico pode levar mais de 400 anos para se decompor.",
+  "Os catadores e as cooperativas recolhem grande parte de todo o material reciclado no Brasil.",
+  "O lixo orgânico apodrecendo nos aterros solta metano, um gás que aquece o planeta.",
+  "Uma latinha reciclada pode voltar à prateleira em cerca de 60 dias.",
+  "Pneus largados acumulam água e viram criadouro do mosquito da dengue.",
+  "Óleo de cozinha jogado na pia entope canos e polui rios."
+];
+
+// Títulos do jogador conforme o XP
+const RANKS = [
+  { xp: 0,    titulo: "Aprendiz do Lixo",       icone: "🌱" },
+  { xp: 150,  titulo: "Separador Iniciante",    icone: "🗑️" },
+  { xp: 400,  titulo: "Reciclador Esperto",     icone: "♻️" },
+  { xp: 800,  titulo: "Defensor da Natureza",   icone: "🛡️" },
+  { xp: 1300, titulo: "Herói da Coleta",        icone: "🦸" },
+  { xp: 2000, titulo: "Guardião do Planeta",    icone: "🌍" }
 ];
