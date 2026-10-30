@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full bg-slate-950">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#081c15" />
+  <meta name="description" content="EcoQuest: aprenda a descartar o lixo do jeito certo, com fases, eventos e memes." />
+  <title>EcoQuest - Reciclagem Gamificada</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Ícones (versão fixa, para não quebrar quando a biblioteca atualizar) e confete -->
+  <script src="https://unpkg.com/lucide@1.64.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="bg-slate-950 min-h-screen flex items-center justify-center p-0 sm:p-4 text-slate-800">
+
+  <!-- MOLDURA DO APP -->
+  <div class="app-screen w-full bg-slate-50 sm:rounded-[40px] flex flex-col overflow-hidden relative border-0 sm:border-8 border-slate-900">
+
+    <!-- CABEÇALHO: ofensiva, XP, vidas e símbolo de reciclagem -->
+    <header id="app-header" class="hidden bg-[#081c15] text-white px-5 pt-4 pb-3 flex items-center justify-between shadow-md z-20 border-b border-[#1b4332]">
+      <div class="flex items-center gap-2.5">
+        <div class="flex items-center gap-1 bg-[#1b4332] px-3 py-1 rounded-full border border-emerald-500/30 text-xs font-bold text-amber-400" title="Ofensiva: dias seguidos jogando">
+          <i data-lucide="flame" class="w-4 h-4 text-amber-400"></i>
+          <span id="streak-count">0</span>d
+        </div>
+        <div class="flex items-center gap-1 bg-[#1b4332] px-3 py-1 rounded-full border border-emerald-500/30 text-xs font-bold text-emerald-300" title="XP acumulado">
+          <i data-lucide="zap" class="w-4 h-4 text-amber-300"></i>
+          <span id="xp-count">0</span> XP
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div id="lives-pill" class="flex items-center gap-1 bg-red-950/70 px-3 py-1 rounded-full border border-red-700/40 text-xs font-bold text-red-400" title="Vidas">
+          <i data-lucide="heart" class="w-4 h-4 text-red-500"></i>
+          <span id="lives-count">5</span>
+        </div>
+        <div class="bg-emerald-500/20 p-1.5 rounded-xl text-emerald-300 border border-emerald-500/40" title="EcoQuest Reciclagem">
+          <span class="text-xl inline-block spin-slow" aria-hidden="true">♻️</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- TELA PRINCIPAL (preenchida pelo app.js) -->
+    <main id="app-viewport" class="flex-1 overflow-y-auto custom-scrollbar relative bg-slate-50"></main>
+
+    <!-- BARRA DE NAVEGAÇÃO -->
+    <nav id="app-nav" class="hidden absolute bottom-0 inset-x-0 bg-white border-t border-slate-200 px-2 py-2 flex justify-around items-center z-30 shadow-lg">
+      <button onclick="switchTab('learn')" id="nav-learn" class="nav-btn flex flex-col items-center gap-1">
+        <div class="p-1 rounded-xl"><i data-lucide="map" class="w-5 h-5"></i></div>
+        <span class="text-[10px]">Aprender</span>
+      </button>
+      <button onclick="switchTab('events')" id="nav-events" class="nav-btn flex flex-col items-center gap-1">
+        <div class="p-1 rounded-xl"><i data-lucide="trophy" class="w-5 h-5"></i></div>
+        <span class="text-[10px]">Eventos</span>
+      </button>
+      <button onclick="switchTab('guide')" id="nav-guide" class="nav-btn flex flex-col items-center gap-1">
+        <div class="p-1 rounded-xl"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+        <span class="text-[10px]">Guia Lixo</span>
+      </button>
+      <button onclick="switchTab('creators')" id="nav-creators" class="nav-btn flex flex-col items-center gap-1">
+        <div class="p-1 rounded-xl"><i data-lucide="users" class="w-5 h-5"></i></div>
+        <span class="text-[10px]">Criadores</span>
+      </button>
+    </nav>
+
+    <!-- AVISO DE ACERTO/ERRO NAS PERGUNTAS -->
+    <div id="feedback-banner" class="hidden absolute bottom-0 inset-x-0 p-4 pb-6 z-40 border-t-2 shadow-2xl">
+      <div class="flex items-start gap-3">
+        <div id="feedback-icon" class="text-3xl mt-0.5"></div>
+        <div class="flex-1">
+          <h4 id="feedback-title" class="font-extrabold text-base"></h4>
+          <p id="feedback-msg" class="text-xs mt-0.5 leading-relaxed"></p>
+        </div>
+      </div>
+      <button id="feedback-btn" onclick="nextQuestion()" class="w-full mt-3 py-3 rounded-xl text-white font-black text-sm shadow-md press flex items-center justify-center gap-2">
+        <span id="feedback-btn-text">Continuar</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- JANELA DE DETALHES DO GUIA -->
+    <div id="guide-modal" class="hidden absolute inset-0 bg-slate-900/60 z-50 flex flex-col justify-end" onclick="if (event.target === this) closeGuideModal()">
+      <div class="bg-white rounded-t-3xl max-h-[85%] overflow-y-auto p-5 space-y-4 shadow-2xl border-t-4 border-[#1b4332] custom-scrollbar">
+        <div class="flex justify-between items-center border-b pb-3">
+          <div class="flex items-center gap-3">
+            <span id="modal-icon" class="text-3xl"></span>
+            <div>
+              <h3 id="modal-title" class="text-lg font-black text-slate-900"></h3>
+              <span id="modal-color-tag" class="text-[10px] font-black uppercase px-2 py-0.5 rounded-full text-white"></span>
+            </div>
+          </div>
+          <button onclick="closeGuideModal()" class="text-slate-400 hover:text-slate-600 p-1" aria-label="Fechar">
+            <i data-lucide="x" class="w-6 h-6"></i>
+          </button>
+        </div>
+
+        <div id="modal-content" class="space-y-3 text-xs text-slate-700 leading-relaxed"></div>
+
+        <div class="pt-2 border-t">
+          <button id="modal-test-btn" class="w-full py-3.5 bg-[#1b4332] hover:bg-[#081c15] text-white font-extrabold text-sm rounded-2xl shadow-lg flex items-center justify-center gap-2 press">
+            <i data-lucide="target" class="w-4 h-4 text-emerald-400"></i>
+            <span>Fazer teste rápido deste lixo</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Conteúdo (perguntas, criadores...) e depois a lógica do app -->
+  <script src="dados.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

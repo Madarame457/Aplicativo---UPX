@@ -1,0 +1,103 @@
+/* =========================================================
+   EcoQuest — estilos próprios (o resto vem do Tailwind CDN)
+   ========================================================= */
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input {
+  user-select: text;
+}
+
+/* Moldura de celular no computador; tela cheia no celular */
+.app-screen {
+  max-width: 430px;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 900px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+@media (max-height: 700px) {
+  .app-screen {
+    max-height: 100dvh;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #52b788;
+  border-radius: 10px;
+}
+
+/* Botões das fases na trilha (substitui o w-18/h-18, que não existe no Tailwind) */
+.level-node {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.875rem;
+  border: 4px solid #fff;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.18), 0 10px 20px -5px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.level-node:active:not(:disabled) {
+  transform: translateY(4px) scale(0.96);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18);
+}
+
+.level-node:disabled {
+  cursor: not-allowed;
+}
+
+/* Fase atual: pulsa para chamar atenção */
+.level-current {
+  animation: level-bounce 2.5s infinite;
+}
+
+@keyframes level-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.press:active {
+  transform: scale(0.98);
+}
+
+.spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Treme a resposta errada */
+.shake {
+  animation: shake 0.35s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .level-current,
+  .spin-slow,
+  .shake,
+  .animate-bounce,
+  .animate-pulse {
+    animation: none !important;
+  }
+}
