@@ -6,10 +6,10 @@
 /* ---------- Configurações do jogo ---------- */
 const SAVE_KEY = 'ecoquest_save_v1';
 const MAX_LIVES = 5;
-const LIFE_REGEN_MINUTES = 3;          // 1 vida volta a cada 3 minutos
+const LIFE_REGEN_MINUTES = 3;          
 const XP_PER_CORRECT = 10;
-const XP_LEVEL_FIRST_CLEAR = 50;       // bônus ao terminar uma fase pela 1ª vez
-const XP_REPLAY_BONUS = 10;            // bônus ao refazer algo já concluído
+const XP_LEVEL_FIRST_CLEAR = 50;       
+const XP_REPLAY_BONUS = 10;            
 const XP_EVENT_FIRST_CLEAR = 40;
 
 const LIFE_REGEN_MS = LIFE_REGEN_MINUTES * 60 * 1000;
@@ -22,19 +22,18 @@ function defaultSave() {
     user: { name: '', email: '' },
     xp: 0,
     streak: 0,
-    lastPlayedDate: null,     // 'AAAA-MM-DD' do último dia em que terminou uma lição
+    lastPlayedDate: null,     
     lives: MAX_LIVES,
     livesUpdatedAt: Date.now(),
     completedLevels: [],
     completedEvents: [],
-    totalCorrect: 0,          // perguntas acertadas no total
-    pledges: [],              // compromissos assumidos na aba Impacto
-    pledgesRewarded: []       // compromissos que já deram XP
+    totalCorrect: 0,          
+    pledges: [],              
+    pledgesRewarded: []       
   };
 }
 
-const XP_PLEDGE = 5;          // XP por compromisso assumido (só na 1ª vez)
-
+const XP_PLEDGE = 5;          
 let save = loadSave();
 
 function loadSave() {
@@ -51,7 +50,7 @@ function persist() {
   try {
     localStorage.setItem(SAVE_KEY, JSON.stringify(save));
   } catch (e) {
-    // Sem armazenamento (modo anônimo etc.): o jogo continua, só não salva.
+   
   }
 }
 
@@ -59,8 +58,8 @@ function persist() {
 /* ---------- Estado da sessão (não é salvo) ---------- */
 const session = {
   currentTab: 'learn',
-  screen: 'tab',    // 'tab' = alguma aba aberta; 'other' = lição, resultado ou sem vidas
-  quiz: null,       // lição em andamento
+  screen: 'tab',    
+  quiz: null,       
   timer: null,
   timeLeft: 0
 };
@@ -76,7 +75,7 @@ function esc(text) {
     .replace(/'/g, '&#39;');
 }
 
-// Tira acentos, maiúsculas e palavras de enfeite ("a lixeira azul" → "azul")
+
 const FILLER_WORDS = new Set(['a', 'o', 'as', 'os', 'no', 'na', 'nos', 'nas', 'e', 'de', 'do', 'da', 'lixeira', 'cor', 'vai']);
 function normalizeAnswer(text) {
   return String(text)
@@ -150,7 +149,7 @@ function factCard(fact) {
 }
 
 
-/* ---------- Sons (gerados pelo navegador) ---------- */
+/* ---------- Sons ---------- */
 let audioCtx = null;
 
 function playSound(type) {
@@ -231,7 +230,7 @@ function formatCountdown(ms) {
 
 
 /* ---------- Ofensiva (dias seguidos) ---------- */
-// Se o jogador pulou um dia, a ofensiva mostrada volta a 0.
+
 function currentStreak() {
   if (save.lastPlayedDate === todayKey() || save.lastPlayedDate === yesterdayKey()) {
     return save.streak;
@@ -280,7 +279,7 @@ function renderHeader() {
     ? 'Vidas cheias'
     : `Próxima vida em ${formatCountdown(msToNextLife())}`;
 
-  // Atualiza contadores de "próxima vida" que estiverem na tela
+
   document.querySelectorAll('[data-life-countdown]').forEach(el => {
     el.textContent = formatCountdown(msToNextLife());
   });
@@ -391,7 +390,7 @@ function logout() {
   renderLoginView();
 }
 
-// Pede um segundo toque para confirmar (sem janela do navegador)
+
 let resetArmedUntil = 0;
 function resetProgress(button) {
   if (Date.now() > resetArmedUntil) {
@@ -840,7 +839,6 @@ function togglePledge(id) {
 
 /* =========================================================
    ABA CRIADORES — os dados ficam em dados.js
-   Os avatares são sorteados toda vez que a aba abre.
    ========================================================= */
 function avatarHTML(index, emoji, color) {
   return `
@@ -948,7 +946,7 @@ function startQuiz(kind, id, questions, returnTab) {
   refreshLives();
   session.currentTab = returnTab;
 
-  // Testes do Guia são treino: não gastam vidas e podem ser feitos mesmo com 0 vidas
+ 
   const practice = kind === 'guide';
 
   if (!practice && save.lives <= 0) {
@@ -962,7 +960,7 @@ function startQuiz(kind, id, questions, returnTab) {
     id,
     returnTab,
     practice,
-    questions: questions.map(q => ({ ...q })),  // cópia: erros entram de novo no fim
+    questions: questions.map(q => ({ ...q })),  
     originalCount: questions.length,
     index: 0,
     correctCount: 0,
@@ -973,7 +971,7 @@ function startQuiz(kind, id, questions, returnTab) {
     typed: ''
   };
 
-  // Durante a lição a barra de baixo some, como no Duolingo
+
   document.getElementById('app-nav').classList.add('hidden');
   renderQuestion();
 }
@@ -1130,7 +1128,7 @@ function checkAnswer(isTimeOut = false) {
   const q = quiz.questions[quiz.index];
   const isChoice = q.type === 'choice' || q.type === 'timer';
 
-  // Sem resposta e sem tempo esgotado: ignora (ex.: Enter com campo vazio)
+
   if (!isTimeOut) {
     if (isChoice && quiz.selected === null) return;
     if (!isChoice && !quiz.typed.trim()) return;
@@ -1147,7 +1145,6 @@ function checkAnswer(isTimeOut = false) {
     isCorrect = !isTimeOut && accepted.includes(normalizeAnswer(quiz.typed));
   }
 
-  // Trava a resposta e mostra qual era a certa
   setVerifyEnabled(false);
   document.getElementById('verify-btn').classList.add('hidden');
   if (isChoice) {
@@ -1196,7 +1193,7 @@ function checkAnswer(isTimeOut = false) {
     quiz.mistakes++;
     if (!quiz.practice) loseLife();
 
-    // Como no Duolingo: a pergunta errada volta no fim da lição (uma vez)
+   
     if (!q._retry) quiz.questions.push({ ...q, _retry: true });
 
     const correctText = isChoice
@@ -1211,7 +1208,7 @@ function checkAnswer(isTimeOut = false) {
     btnText.textContent = (!quiz.practice && save.lives <= 0) ? 'Ver resultado' : 'Continuar';
   }
 
-  // "Por que importa": aparece nas perguntas que têm o campo impact
+  
   const impactEl = document.getElementById('feedback-impact');
   if (q.impact) {
     impactEl.textContent = `🌍 Por que importa: ${q.impact}`;
