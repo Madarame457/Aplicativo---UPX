@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "EcoQuest",
+    "slug": "ecoquest",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#081c15",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "br.edu.facens.ecoquest"
+    },
+    "android": {
+      "package": "br.edu.facens.ecoquest",
+      "adaptiveIcon": {
+        "backgroundColor": "#081c15",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-audio",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 160,
+          "resizeMode": "contain",
+          "backgroundColor": "#081c15"
+        }
+      ]
+    ]
+  }
+}
