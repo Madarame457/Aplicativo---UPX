@@ -1303,3 +1303,16 @@ const RANKS = [
   { xp: 1300, titulo: "Herói da Coleta",        icone: "🦸" },
   { xp: 2000, titulo: "Guardião do Planeta",    icone: "🌍" }
 ];
+
+
+/* ---------------------------------------------------------
+   Deixa o aplicativo (pasta aplicativo/) usar este mesmo conteúdo.
+   No navegador esta parte é ignorada.
+   --------------------------------------------------------- */
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = {
+    CRIADORES, INSPIRACOES, AVATARES, AVATAR_CORES,
+    GUIDE_DATABASE, LEVELS, EVENTS,
+    IMPACTO_STATS, CINCO_RS, CAMINHO_DO_LIXO, COMPROMISSOS, FATOS, RANKS
+  };
+}
