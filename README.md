@@ -9,6 +9,10 @@ O projeto tem duas versões que usam o **mesmo conteúdo** (o arquivo `dados.js`
 - **Aplicativo de celular** (pasta `aplicativo/`), feito com Expo / React Native. Não usa HTML.
 - **Versão web** (`index.html`, `style.css`, `app.js`), que abre no navegador.
 
+A versão atual é a **1.1.0**. O que mudou em cada versão está no [CHANGELOG](CHANGELOG.md), e os arquivos de cada versão ficam na página de [Releases](https://github.com/Madarame457/Aplicativo---UPX/releases).
+
+> O .zip do release não traz a pasta `node_modules` (ela tem cerca de 400 MB). Depois de extrair, rode `npm install` dentro da pasta `aplicativo`, como explicado abaixo.
+
 ## Como rodar o aplicativo no celular
 
 Você precisa do [Node.js](https://nodejs.org) (versão 22 LTS ou mais nova) no computador e do app **Expo Go** no celular (Play Store ou App Store).
