@@ -321,7 +321,7 @@ const LEVELS = [
   {
     id: "level_1",
     unit: { title: "Unidade 1 · Separar certo", subtitle: "As cores e o que vai em cada lixeira", emoji: "🗑️" },
-    title: "Fase 1: Chill Guy e as Cores",
+    title: "Fase 1: As Cores da Coleta Seletiva",
     icon: "🐶",
     color: "bg-emerald-600",
     questions: [
@@ -368,7 +368,7 @@ const LEVELS = [
   },
   {
     id: "level_2",
-    title: "Fase 2: Modo Pense Rápido",
+    title: "Fase 2: Plástico na Lixeira Certa",
     icon: "⚡",
     color: "bg-amber-500",
     questions: [
@@ -419,7 +419,7 @@ const LEVELS = [
   },
   {
     id: "level_3",
-    title: "Fase 3: Mestre das Baterias",
+    title: "Fase 3: Pilhas, Baterias e Eletrônicos",
     icon: "🔋",
     color: "bg-orange-500",
     questions: [
@@ -477,7 +477,7 @@ const LEVELS = [
   },
   {
     id: "level_4",
-    title: "Fase 4: Vidro Seguro com Hawk Tuah",
+    title: "Fase 4: Descarte Seguro do Vidro",
     icon: "🍾",
     color: "bg-pink-600",
     questions: [
@@ -531,7 +531,7 @@ const LEVELS = [
   },
   {
     id: "level_5",
-    title: "Fase 5: Compostagem com a Capivara",
+    title: "Fase 5: Orgânicos e Compostagem",
     icon: "🦫",
     color: "bg-teal-600",
     questions: [
@@ -586,7 +586,7 @@ const LEVELS = [
   {
     id: "level_6",
     unit: { title: "Unidade 2 · Por que reciclar importa", subtitle: "O impacto do lixo no Brasil e no planeta", emoji: "🌍" },
-    title: "Fase 6: Os 5 Rs da Sustentabilidade",
+    title: "Fase 6: Repensar, Reduzir e Reutilizar",
     icon: "🔁",
     color: "bg-lime-600",
     questions: [
@@ -634,7 +634,7 @@ const LEVELS = [
   },
   {
     id: "level_7",
-    title: "Fase 7: O Caminho do Lixo",
+    title: "Fase 7: Para Onde Vai o Seu Lixo",
     icon: "🚛",
     color: "bg-sky-600",
     questions: [
@@ -688,7 +688,7 @@ const LEVELS = [
   },
   {
     id: "level_8",
-    title: "Fase 8: O Lixo do Brasil em Números",
+    title: "Fase 8: O Lixo no Brasil em Números",
     icon: "📊",
     color: "bg-indigo-600",
     questions: [
@@ -739,7 +739,7 @@ const LEVELS = [
   },
   {
     id: "level_9",
-    title: "Fase 9: Oceanos e Microplástico",
+    title: "Fase 9: Plástico nos Oceanos",
     icon: "🌊",
     color: "bg-cyan-600",
     questions: [
@@ -788,7 +788,7 @@ const LEVELS = [
   },
   {
     id: "level_10",
-    title: "Fase 10: Consumo Consciente",
+    title: "Fase 10: Consumo Consciente no Dia a Dia",
     icon: "🛒",
     color: "bg-rose-600",
     questions: [
