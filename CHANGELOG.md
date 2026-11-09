@@ -2,6 +2,27 @@
 
 Todas as mudanças importantes do projeto ficam registradas aqui.
 
+## [Não lançado]
+
+### Alterado
+
+- Os 8 eventos ganharam nomes ligados ao conteúdo, no lugar dos nomes com memes:
+
+  | Antes | Agora |
+  | --- | --- |
+  | Gigachad e Bombastic Side Eye | Revisão das Lixeiras |
+  | Blitz dos 5 Segundos! | Recicla ou Não? 5 Segundos |
+  | Caçadores de Mitos do Lixo | Mitos e Verdades da Reciclagem |
+  | Separa Rápido: 4 Segundos! | Qual Lixeira? 4 Segundos |
+  | O Esquadrão Brainrot | Resíduos Especiais e Ecopontos |
+  | Detetive do Lixo | Itens que Confundem |
+  | Por que reciclar? | Por que Reciclar? |
+  | O Desafio Supremo | Desafio Final da Reciclagem |
+
+- As etiquetas, descrições e ícones dos eventos também foram trocados para falar do conteúdo de cada um.
+- O topo da aba Eventos virou "Eventos e Desafios", sem a frase sobre memes.
+- O antigo "Chefão Final" agora se chama "Desafio Final" nos avisos do app e da versão web.
+
 ## [1.1.0] - 2026-11-08
 
 ### Alterado
