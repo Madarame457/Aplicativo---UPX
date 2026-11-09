@@ -73,7 +73,7 @@ Abra o arquivo `index.html` no navegador (Chrome, Edge, Firefox…). Precisa de 
 - A pergunta errada volta no fim da lição, como no Duolingo.
 - Os testes do **Guia Lixo** são treino: não gastam vidas, e acertar tudo de primeira devolve 1 vida.
 - A ofensiva conta os dias seguidos em que você termina pelo menos uma lição.
-- Ao terminar todas as fases, o evento **Chefão Final** é liberado.
+- Ao terminar todas as fases, o evento **Desafio Final** é liberado.
 - O progresso fica salvo no próprio celular (ou no navegador, na versão web).
 - No app, os acertos e erros também vibram o celular, e os sons podem ser desligados na aba Criadores.
 - As cores das lixeiras seguem a Resolução CONAMA nº 275/2001.

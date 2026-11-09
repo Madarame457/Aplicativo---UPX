@@ -150,7 +150,7 @@ export default function TelaTrilha({ save, agora, onFase, onAba }) {
             <Texto style={{ fontSize: 34 }}>👑</Texto>
             <View style={{ flex: 1 }}>
               <Texto peso="extrabold" style={{ fontSize: 14, color: '#fff' }}>Você é Mestre da Reciclagem!</Texto>
-              <Texto style={{ fontSize: 12, color: '#f3e8ff' }}>O Chefão Final foi liberado na aba Eventos.</Texto>
+              <Texto style={{ fontSize: 12, color: '#f3e8ff' }}>O Desafio Final foi liberado na aba Eventos.</Texto>
             </View>
             <Feather name="chevron-right" size={20} color="#fff" />
           </Gradiente>

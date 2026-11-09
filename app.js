@@ -523,7 +523,7 @@ function renderLearnTab(container) {
         <span class="text-4xl">👑</span>
         <div class="flex-1">
           <h3 class="font-black text-sm">Você é Mestre da Reciclagem!</h3>
-          <p class="text-[11px] text-purple-100/80">O Chefão Final foi liberado na aba Eventos.</p>
+          <p class="text-[11px] text-purple-100/80">O Desafio Final foi liberado na aba Eventos.</p>
         </div>
         <i data-lucide="chevron-right" class="w-5 h-5"></i>
       </div>
@@ -625,8 +625,8 @@ function renderEventsTab(container) {
     <div class="p-5 space-y-4 pb-24">
       <div class="text-center">
         <span class="bg-amber-100 text-amber-800 text-[10px] font-black px-3 py-1 rounded-full uppercase border border-amber-300">Desafios especiais</span>
-        <h2 class="text-xl font-black text-slate-900 mt-2">Eventos e Desafios Virais 🏆</h2>
-        <p class="text-xs text-slate-500 mt-0.5">Enfrente perguntas com os maiores memes da internet!</p>
+        <h2 class="text-xl font-black text-slate-900 mt-2">Eventos e Desafios 🏆</h2>
+        <p class="text-xs text-slate-500 mt-0.5">Desafios especiais para testar o que você aprendeu na trilha!</p>
       </div>
       ${cards}
     </div>
@@ -1267,7 +1267,7 @@ function renderQuizCompletion() {
       if (nextIndex < LEVELS.length) {
         extraLine = `🔓 Nova fase liberada: ${LEVELS[nextIndex].title}`;
       } else {
-        extraLine = '👑 Você terminou a trilha! O Chefão Final foi liberado nos Eventos.';
+        extraLine = '👑 Você terminou a trilha! O Desafio Final foi liberado nos Eventos.';
       }
     }
     title = 'Fase concluída!';

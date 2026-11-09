@@ -12,8 +12,8 @@ export default function TelaEventos({ save, onEvento }) {
     <ScrollView contentContainerStyle={estilos.conteudo}>
       <View style={{ gap: 6, alignItems: 'center' }}>
         <Selo texto="Desafios especiais" cor="#92400e" fundo="#fef3c7" borda="#fcd34d" />
-        <Texto peso="extrabold" style={estilos.titulo}>Eventos e Desafios Virais 🏆</Texto>
-        <Texto style={estilos.subtitulo}>Enfrente perguntas com os maiores memes da internet!</Texto>
+        <Texto peso="extrabold" style={estilos.titulo}>Eventos e Desafios 🏆</Texto>
+        <Texto style={estilos.subtitulo}>Desafios especiais para testar o que você aprendeu na trilha!</Texto>
       </View>
 
       {EVENTS.map((ev) => {

@@ -201,7 +201,7 @@ export function concluirLicao(save, licao, agora = Date.now()) {
       const proxima = LEVELS.findIndex((f) => f.id === licao.id) + 1;
       mensagemExtra = proxima < LEVELS.length
         ? `🔓 Nova fase liberada: ${LEVELS[proxima].title}`
-        : '👑 Você terminou a trilha! O Chefão Final foi liberado nos Eventos.';
+        : '👑 Você terminou a trilha! O Desafio Final foi liberado nos Eventos.';
     }
     tituloTela = 'Fase concluída!';
   } else if (licao.tipo === 'event') {
