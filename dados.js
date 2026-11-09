@@ -848,10 +848,10 @@ const LEVELS = [
 const EVENTS = [
   {
     id: "viral_memes",
-    badge: "MEME ROYALE",
-    title: "Gigachad e Bombastic Side Eye",
-    subtitle: "Mostre que você é um Chad da reciclagem!",
-    icon: "🗿",
+    badge: "REVISÃO",
+    title: "Revisão das Lixeiras",
+    subtitle: "Plástico, vidro, rejeito e tempo de decomposição.",
+    icon: "🗑️",
     style: "from-[#081c15] to-[#1b4332] border-emerald-500/40",
     questions: [
       {
@@ -890,8 +890,8 @@ const EVENTS = [
   {
     id: "quick_think",
     badge: "PENSE RÁPIDO",
-    title: "Blitz dos 5 Segundos!",
-    subtitle: "Responda antes do cronômetro zerar!",
+    title: "Recicla ou Não? 5 Segundos",
+    subtitle: "Papel higiênico, latas, espelhos e pilhas contra o relógio.",
     icon: "⏱️",
     style: "from-amber-600 to-red-700 border-amber-400/40",
     questions: [
@@ -936,8 +936,8 @@ const EVENTS = [
   {
     id: "mito_verdade",
     badge: "MITO OU VERDADE",
-    title: "Caçadores de Mitos do Lixo",
-    subtitle: "Descubra o que é lenda e o que é fato!",
+    title: "Mitos e Verdades da Reciclagem",
+    subtitle: "Lavar embalagens, plástico biodegradável e outras dúvidas comuns.",
     icon: "🤔",
     style: "from-sky-600 to-indigo-700 border-sky-400/40",
     questions: [
@@ -986,9 +986,9 @@ const EVENTS = [
   },
   {
     id: "separa_rapido",
-    badge: "BLITZ RELÂMPAGO",
-    title: "Separa Rápido: 4 Segundos!",
-    subtitle: "Diga a lixeira certa antes do tempo acabar!",
+    badge: "CORES DAS LIXEIRAS",
+    title: "Qual Lixeira? 4 Segundos",
+    subtitle: "Diga a cor certa de cada lixo antes do tempo acabar.",
     icon: "⚡",
     style: "from-yellow-500 to-orange-600 border-yellow-300/40",
     questions: [
@@ -1044,10 +1044,10 @@ const EVENTS = [
   },
   {
     id: "brainrot_squad",
-    badge: "BRAINROT SQUAD",
-    title: "O Esquadrão Brainrot",
-    subtitle: "Tralalero, Bombardiro e a turma testam você!",
-    icon: "🦈",
+    badge: "DESCARTE ESPECIAL",
+    title: "Resíduos Especiais e Ecopontos",
+    subtitle: "Pneus, redes de pesca, pilhas e borra de café: onde vai cada um.",
+    icon: "📍",
     style: "from-fuchsia-600 to-purple-800 border-fuchsia-400/40",
     questions: [
       {
@@ -1094,9 +1094,9 @@ const EVENTS = [
   {
     id: "detetive",
     badge: "MODO DIFÍCIL",
-    title: "Detetive do Lixo 🔎",
-    subtitle: "Itens que enganam até os adultos!",
-    icon: "🕵️",
+    title: "Itens que Confundem",
+    subtitle: "Cupom fiscal, pacote de salgadinho, termômetro e outros casos difíceis.",
+    icon: "🔎",
     style: "from-slate-700 to-slate-900 border-slate-400/40",
     questions: [
       {
@@ -1144,9 +1144,9 @@ const EVENTS = [
   },
   {
     id: "missao_planeta",
-    badge: "MISSÃO PLANETA",
-    title: "Por que reciclar? 🌍",
-    subtitle: "O quiz sobre o impacto real da reciclagem.",
+    badge: "IMPACTO NO PLANETA",
+    title: "Por que Reciclar?",
+    subtitle: "Saúde, clima e natureza: o efeito real da reciclagem.",
     icon: "🌎",
     style: "from-emerald-600 to-teal-800 border-emerald-300/40",
     questions: [
@@ -1194,8 +1194,8 @@ const EVENTS = [
   },
   {
     id: "boss_final",
-    badge: "CHEFÃO FINAL",
-    title: "O Desafio Supremo",
+    badge: "DESAFIO FINAL",
+    title: "Desafio Final da Reciclagem",
     subtitle: "Libera quando você terminar todas as fases da trilha.",
     icon: "👑",
     style: "from-purple-700 to-indigo-900 border-purple-400/40",
